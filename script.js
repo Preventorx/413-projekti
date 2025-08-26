@@ -13,9 +13,9 @@ function paivitaSaldo() {
     saldoMaara.textContent = saldo;
 }
 
-function pyoraytaRullia(lukitut = []) {
+function pyoraytaRullia(lukitutRullat = []) {
     rullat.forEach((rulla, index) => {
-        if (!lukitut.includes(index)) {
+        if (!lukitutRullat.includes(index)) {
             let randomIndex = Math.floor(Math.random() * symbolit.length);
             rulla.style.backgroundImage = `url('${symbolit[randomIndex]}')`;
             rulla.classList.remove("locked")
@@ -62,16 +62,14 @@ function tarkistaVoitto() {
         saldo += voitto;
         viesti.textContent = `Voitit ${voitto} €!`;
     } else {
-        viesti.textContent = "Ei voittoa";
+        viesti.textContent = "Ei voittoa...";
     }
 
     paivitaSaldo();
 }
 
 function lukitseRulla(rulla) {
-    let onLukittu = rulla.getAttribute("data-locked") === "true";
-    rulla.setAttribute("data-locked", !onLukittu);
-    rulla.classList.toggle("locked", !onLukittu);
+    rulla.classList.toggle("locked");
 }
 
 pelaaNappi.addEventListener("click", () => {
@@ -96,13 +94,13 @@ pelaaNappi.addEventListener("click", () => {
 
 rullat.forEach(rulla => {
     rulla.addEventListener("click", () => {
-        toggleLock(rulla);
+        lukitseRulla(rulla);
     });
 });
 
-saldoNapit.forEach(nappi => {
-    button.addEventListener("click", () => {
-        valittuPanos = parseInt(button.getAttribute("data-panos"));
+panosNapit.forEach(nappi => {
+    nappi.addEventListener("click", () => {
+        valittuPanos = parseInt(nappi.getAttribute("data-panos"));
         valittuPanosElementti.textContent = valittuPanos;
     });
 });
