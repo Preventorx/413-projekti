@@ -1,7 +1,7 @@
 // Tarvittavat globaalit muuttujat
 let saldo = 100;
 let valittuPanos = 1;
-let symbolit = ["images/kirsikka.png", "images/meloni.png", "images/omena.png", "images/päärynä.png", "images/seiska.png"];
+let symbolit = ["images/seiska.png", "images/kirsikka.png", "images/meloni.png","images/päärynä.png", "images/omena.png"]; 
 let rullat = document.querySelectorAll(".rulla");
 let pelaaNappi = document.getElementById("pelaaNappi");
 let panosNapit = document.querySelectorAll(".panosNappi");
@@ -9,18 +9,23 @@ let valittuPanosElementti = document.getElementById("valittuPanos");
 let saldoMaara = document.getElementById("saldoMaara")
 let viesti = document.getElementById("viesti");
 
+let peliTila = {
+    lukitutRullat: [],
+    uusiKierros: false
+};
+
 function paivitaSaldo() {
     saldoMaara.textContent = saldo;
 }
 
-function pyoraytaRullia(lukitutRullat = []) {
+function pyoraytaRullia() {
     rullat.forEach((rulla, index) => {
-        if (!lukitutRullat.includes(index)) {
+        if (!peliTila.lukitutRullat.includes(index) || peliTila.uusiKierros) {
             let randomIndex = Math.floor(Math.random() * symbolit.length);
             rulla.style.backgroundImage = `url('${symbolit[randomIndex]}')`;
-            rulla.classList.remove("locked")
         }
     });
+    peliTila.uusiKierros = false;
 }
 
 function tarkistaVoitto() {
@@ -68,8 +73,17 @@ function tarkistaVoitto() {
     paivitaSaldo();
 }
 
-function lukitseRulla(rulla) {
+function lukitseRulla(rulla, index) {
+    if (!peliTila.uusiKierros) {
+        const rullaIndex = peliTila.lukitutRullat.indexOf(index);
+        if (rullaIndex === -1) {
+            peliTila.lukitutRullat.push(index);
+        } else {
+            peliTila.lukitutRullat.splice(rullaIndex, 1);
+        }
+    
     rulla.classList.toggle("locked");
+    }
 }
 
 pelaaNappi.addEventListener("click", () => {
@@ -81,20 +95,22 @@ pelaaNappi.addEventListener("click", () => {
     saldo -= valittuPanos;
     paivitaSaldo();
 
-    let lukitutRullat = [];
-    rullat.forEach((rulla, index) => {
-        if (rulla.getAttribute("data-locked") === "true") {
-            lukitutRullat.push(index);
-        }
-    });
+    if (peliTila.lukitutRullat.length > 0) {
+        peliTila.uusiKierros = true;
+    } else {
+        peliTila.lukitutRullat = [];
+        rullat.forEach(rulla => {
+            rulla.classList.remove("locked");
+        });
+    }
 
-    pyoraytaRullia(lukitutRullat);
+    pyoraytaRullia();
     tarkistaVoitto();
 });
 
-rullat.forEach(rulla => {
+rullat.forEach((rulla, index) => {
     rulla.addEventListener("click", () => {
-        lukitseRulla(rulla);
+        lukitseRulla(rulla, index);
     });
 });
 
