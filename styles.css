@@ -4,6 +4,50 @@ body {
     background-color: azure;
 }
 
+.kokoAlue {
+    display: flex;
+    justify-content: center;
+    max-width: 900px;
+    margin: 0 auto;
+    gap: 20px
+}
+
+.peliAlue {
+    flex: 2;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.voittoTaulu {
+    flex: 1;
+    background-color: azure;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.voittoTaulu h2 {
+    margin-top: 0;
+}
+
+.voittoTaulu table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.voittoTaulu table, .voittoTaulu th, .voittoTaulu td {
+    border: 1px solid azure;
+}
+
+.voittoTaulu th, .voittoTaulu td {
+    padding: 10px;
+    text-align: center;
+}
+
+.symbolit {
+    width: 40px;
+    height: 40px;
+}
 .rulla {
     display: inline-block;
     width: 80px;
@@ -70,4 +114,12 @@ button {
     font-size: 18px;
     margin-top: 20px;
     min-height: 24px;
+}
+
+#pelaaNappi {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 100px;
+    height: 50px;
 }

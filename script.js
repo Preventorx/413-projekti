@@ -9,10 +9,9 @@ let valittuPanosElementti = document.getElementById("valittuPanos");
 let saldoMaara = document.getElementById("saldoMaara")
 let viesti = document.getElementById("viesti");
 
-let peliTila = {
-    lukitutRullat: [],
-    uusiKierros: false
-};
+let lukitutRullat = [];
+let viimeksiVoitto = false;
+let viimeksiLukittu = false;
 
 function paivitaSaldo() {
     saldoMaara.textContent = saldo;
@@ -20,12 +19,11 @@ function paivitaSaldo() {
 
 function pyoraytaRullia() {
     rullat.forEach((rulla, index) => {
-        if (!peliTila.lukitutRullat.includes(index) || peliTila.uusiKierros) {
+        if (!lukitutRullat.includes(index)) {
             let randomIndex = Math.floor(Math.random() * symbolit.length);
             rulla.style.backgroundImage = `url('${symbolit[randomIndex]}')`;
         }
     });
-    peliTila.uusiKierros = false;
 }
 
 function tarkistaVoitto() {
@@ -39,10 +37,10 @@ function tarkistaVoitto() {
         }
     });
 
-    let kaksiSeiska = 0;
+    let seiskat = 0;
     rullat.forEach(rulla => {
         if (rulla.style.backgroundImage === `url('${symbolit[0]}')`) {
-            kaksiSeiska++;
+            seiskat++;
         }
     });
 
@@ -59,30 +57,36 @@ function tarkistaVoitto() {
         } else if ( ekaSymboli.includes(symbolit[4])) {
             voitto = 6 * panos; // Omenoilla
         }
-    } else if (kaksiSeiska >= 2) {
+    } else if (seiskat >= 3) {
         voitto = 5 * panos;
     }
 
     if (voitto > 0) {
         saldo += voitto;
         viesti.textContent = `Voitit ${voitto} €!`;
+        viimeksiVoitto = true;
+        lukitutRullat = [];
+        rullat.forEach(rulla => {
+            rulla.classList.remove("locked");
+        });
     } else {
-        viesti.textContent = "Ei voittoa...";
-    }
+        viesti.textContent = "Ei voittoa, voit lukita.";
+        viimeksiVoitto = false;
+        viimeksiLukittu = lukitutRullat.length > 0;
+    } 
 
     paivitaSaldo();
 }
 
 function lukitseRulla(rulla, index) {
-    if (!peliTila.uusiKierros) {
-        const rullaIndex = peliTila.lukitutRullat.indexOf(index);
-        if (rullaIndex === -1) {
-            peliTila.lukitutRullat.push(index);
+    if (!viimeksiVoitto && !viimeksiLukittu) {
+        if (!lukitutRullat.includes(index)) {
+            lukitutRullat.push(index);
+            rulla.classList.add("locked");
         } else {
-            peliTila.lukitutRullat.splice(rullaIndex, 1);
+            lukitutRullat = lukitutRullat.filter(item => item !== index);
+            rulla.classList.remove("locked");
         }
-    
-    rulla.classList.toggle("locked");
     }
 }
 
@@ -94,15 +98,6 @@ pelaaNappi.addEventListener("click", () => {
 
     saldo -= valittuPanos;
     paivitaSaldo();
-
-    if (peliTila.lukitutRullat.length > 0) {
-        peliTila.uusiKierros = true;
-    } else {
-        peliTila.lukitutRullat = [];
-        rullat.forEach(rulla => {
-            rulla.classList.remove("locked");
-        });
-    }
 
     pyoraytaRullia();
     tarkistaVoitto();

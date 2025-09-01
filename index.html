@@ -8,29 +8,64 @@
   </head>
 
   <body>
-    <h1>Hedelmäpeli</h1>
-    <div id="saldo">Saldo: <span id="saldoMaara">100</span> €</div>
+    <div class="kokoAlue">
+      <div class="peliAlue">
+        <h1>Hedelmäpeli</h1>
+        <div id="saldo">Saldo: <span id="saldoMaara">100</span> €</div>
 
-    <div id="panosNapit">
-      <button class="panosNappi" data-panos="1" style="background-image: url('images/panos1.png');"></button>
-      <button class="panosNappi" data-panos="2" style="background-image: url('images/panos2.png');"></button>
-      <button class="panosNappi" data-panos="3" style="background-image: url('images/panos3.png');"></button>
+        <div id="panosNapit">
+          <button class="panosNappi" data-panos="1" style="background-image: url('images/panos1.png');"></button>
+          <button class="panosNappi" data-panos="2" style="background-image: url('images/panos2.png');"></button>
+          <button class="panosNappi" data-panos="3" style="background-image: url('images/panos3.png');"></button>
+        </div>
+
+        <div>
+          Valittu panos: <span id="valittuPanos">1</span> €
+          <button id="pelaaNappi" style="background-image: url('images/pelaa.png');"></button>
+        </div>
+
+        <div id="rullat">
+          <div class="rulla" data-locked="false" data-index="0"></div>
+          <div class="rulla" data-locked="false" data-index="1"></div>
+          <div class="rulla" data-locked="false" data-index="2"></div>
+          <div class="rulla" data-locked="false" data-index="3"></div>
+        </div>
+
+        <div id="viesti"></div>
+      </div>
+
+      <div class="voittoTaulu">
+        <h2>Voittotaulukko</h2>
+        <table>
+          <tr>
+            <th>Symboli</th>
+            <th>4 samalla</th>
+            <th>3 Seiskaa</th>
+          </tr>
+          <tr>
+            <td><img class="symbolit" src="/images/seiska.png"></td>
+            <td>10x panos</td>
+            <td>5x panos</td>
+          </tr>
+          <tr>
+            <td><img class="symbolit" src="/images/omena.png"></td>
+            <td>6x panos</td>
+          </tr>
+          <tr>
+            <td><img class="symbolit" src="/images/meloni.png"></td>
+            <td>5x panos</td>
+          </tr>
+          <tr>
+            <td><img class="symbolit" src="/images/päärynä.png"></td>
+            <td>4x panos</td>
+          </tr>
+          <tr>
+            <td><img class="symbolit" src="/images/kirsikka.png"></td>
+            <td>3x panos</td>
+          </tr>
+        </table>
+      </div>
     </div>
-
-    <div>
-      Valittu panos: <span id="valittuPanos">1</span> €
-      <button id="pelaaNappi" style="background-image: url('images/pelaa.png');"></button>
-    </div>
-
-    <div id="rullat">
-      <div class="rulla" data-locked="false" data-index="0"></div>
-      <div class="rulla" data-locked="false" data-index="1"></div>
-      <div class="rulla" data-locked="false" data-index="2"></div>
-      <div class="rulla" data-locked="false" data-index="3"></div>
-    </div>
-
-    <div id="viesti"></div>
-
     <script src="script.js"></script>
   </body>
 </html>
