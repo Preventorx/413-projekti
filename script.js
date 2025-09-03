@@ -37,10 +37,10 @@ function tarkistaVoitto() {
         }
     });
 
-    let seiskat = 0;
+    let seiskat = [];
     rullat.forEach(rulla => {
         if (rulla.style.backgroundImage === `url('${symbolit[0]}')`) {
-            seiskat++;
+            seiskat.push(index);
         }
     });
 
@@ -57,23 +57,30 @@ function tarkistaVoitto() {
         } else if ( ekaSymboli.includes(symbolit[4])) {
             voitto = 6 * panos; // Omenoilla
         }
-    } else if (seiskat >= 3) {
+    } else if (seiskat.length === 3) {
         voitto = 5 * panos;
     }
 
     if (voitto > 0) {
         saldo += voitto;
-        viesti.textContent = `Voitit ${voitto} €!`;
+        if (seiskat.length === 3) {
+            viesti.textContent = `Voitit ${voitto} €!`
+        } else {
+            viesti.textContent = `Voitit ${voitto} €!`;
+        }
         viimeksiVoitto = true;
         lukitutRullat = [];
         rullat.forEach(rulla => {
             rulla.classList.remove("locked");
         });
+        viimeksiLukittu = false;
+    } else if (lukitutRullat.length > 0) {
+        viesti.textContent = "Ei voittoa, et voi lukita.";
+        viimeksiLukittu = true;
     } else {
         viesti.textContent = "Ei voittoa, voit lukita.";
-        viimeksiVoitto = false;
-        viimeksiLukittu = lukitutRullat.length > 0;
-    } 
+        viimeksiLukittu = false;
+    }
 
     paivitaSaldo();
 }
@@ -99,13 +106,23 @@ pelaaNappi.addEventListener("click", () => {
     saldo -= valittuPanos;
     paivitaSaldo();
 
+    if (viimeksiLukittu) {
+        lukitutRullat = []
+        rullat.forEach(rulla => {
+            rulla.classList.remove("locked");
+        });
+        viimeksiLukittu = false;
+    }
+
     pyoraytaRullia();
     tarkistaVoitto();
 });
 
 rullat.forEach((rulla, index) => {
     rulla.addEventListener("click", () => {
-        lukitseRulla(rulla, index);
+        if (!viimeksiVoitto && !viimeksiLukittu) {
+            lukitseRulla(rulla, index);
+        }
     });
 });
 
