@@ -1,7 +1,7 @@
 // Tarvittavat globaalit muuttujat
 let saldo = 100;
 let valittuPanos = 1;
-let symbolit = ["images/seiska.png", "images/kirsikka.png", "images/meloni.png","images/päärynä.png", "images/omena.png"]; 
+let symbolit = ["/413-projekti/images/seiska.png", "/413-projekti/images/kirsikka.png", "/413-projekti/images/meloni.png","/413-projekti/images/päärynä.png", "/413-projekti/images/omena.png"]; 
 let rullat = document.querySelectorAll(".rulla");
 let pelaaNappi = document.getElementById("pelaaNappi");
 let panosNapit = document.querySelectorAll(".panosNappi");
