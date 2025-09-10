@@ -13,10 +13,12 @@ let lukitutRullat = [];
 let viimeksiVoitto = false;
 let viimeksiLukittu = false;
 
+// Saldon päivitys
 function paivitaSaldo() {
     saldoMaara.textContent = saldo;
 }
 
+//Rullien pyöritys
 function pyoraytaRullia() {
     rullat.forEach((rulla, index) => {
         if (!lukitutRullat.includes(index)) {
@@ -26,6 +28,7 @@ function pyoraytaRullia() {
     });
 }
 
+//Voittotarkistus
 function tarkistaVoitto() {
     let panos = valittuPanos;
     let ekaSymboli = rullat[0].style.backgroundImage;
@@ -37,12 +40,16 @@ function tarkistaVoitto() {
         }
     });
 
-    let seiskat = [];
+    let seiskat = 0;
     rullat.forEach(rulla => {
-        if (rulla.style.backgroundImage === `url('${symbolit[0]}')`) {
-            seiskat.push(index);
+        const kuvaRulla = rulla.style.backgroundImage;
+        console.log(`Rulla: ${kuvaRulla}`)
+        if (kuvaRulla.includes(symbolit[0])) {
+            seiskat++;
         }
     });
+
+    console.log(`Seiskoja kierroksella ${seiskat}`);
 
     let voitto = 0;
     if (kaikkiSama) {
@@ -57,13 +64,13 @@ function tarkistaVoitto() {
         } else if ( ekaSymboli.includes(symbolit[4])) {
             voitto = 6 * panos; // Omenoilla
         }
-    } else if (seiskat.length === 3) {
+    } else if (seiskat === 3) {
         voitto = 5 * panos;
     }
 
     if (voitto > 0) {
         saldo += voitto;
-        if (seiskat.length === 3) {
+        if (seiskat === 3) {
             viesti.textContent = `Voitit ${voitto} €!`
         } else {
             viesti.textContent = `Voitit ${voitto} €!`;
@@ -77,14 +84,17 @@ function tarkistaVoitto() {
     } else if (lukitutRullat.length > 0) {
         viesti.textContent = "Ei voittoa, et voi lukita.";
         viimeksiLukittu = true;
+        viimeksiVoitto = false;
     } else {
         viesti.textContent = "Ei voittoa, voit lukita.";
         viimeksiLukittu = false;
+        viimeksiVoitto = false;
     }
 
     paivitaSaldo();
 }
 
+//Rullien lukitsemisen mahdollisuuden tarkistus
 function lukitseRulla(rulla, index) {
     if (!viimeksiVoitto && !viimeksiLukittu) {
         if (!lukitutRullat.includes(index)) {
@@ -97,6 +107,7 @@ function lukitseRulla(rulla, index) {
     }
 }
 
+//Pelaa-napin toiminto
 pelaaNappi.addEventListener("click", () => {
     if (valittuPanos > saldo) {
         viesti.textContent = "Ei riitä rahat!"
@@ -118,6 +129,7 @@ pelaaNappi.addEventListener("click", () => {
     tarkistaVoitto();
 });
 
+//Rullien lukitseminen
 rullat.forEach((rulla, index) => {
     rulla.addEventListener("click", () => {
         if (!viimeksiVoitto && !viimeksiLukittu) {
@@ -126,6 +138,7 @@ rullat.forEach((rulla, index) => {
     });
 });
 
+//Panos-napin toiminto
 panosNapit.forEach(nappi => {
     nappi.addEventListener("click", () => {
         valittuPanos = parseInt(nappi.getAttribute("data-panos"));
@@ -133,4 +146,5 @@ panosNapit.forEach(nappi => {
     });
 });
 
+//Alustus
 paivitaSaldo();
